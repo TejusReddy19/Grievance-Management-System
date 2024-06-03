@@ -38,7 +38,7 @@ Our project successfully creates a user-friendly platform that simplifies the co
 
 
 
-how to use:
+How To Use:
 
 Extract the folder Dataset 
 import the sql file (customer_service) into xampp server by creating a db there.
