@@ -1,0 +1,145 @@
+    body, h1, p, label, input, textarea, form {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    .screen {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .screen1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .screen2 {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        color: #4caf50;
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .form-div {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    form {
+        display: grid;
+        gap: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 2px solid #4caf50;
+        border-radius: 8px;
+        transition: border-color 0.3s;
+    }
+
+    input[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: #64dd17;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    .text-box {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .screen {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .screen1,
+        .screen2 {
+            margin-bottom: 20px;
+        }
+    }
+
+    /* Add styles for the button container */
+    .bton {
+        display: flex;
+        gap: 10px;
+    }
+
+    .bton button {
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+    }
+
+    .bton button:hover {
+        background-color: #45a049;
+    }
+
+
+
+    header {
+        background-color: #4caf50;  /* Updated background color */
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        display: flex;  /* Make items display in a row */
+        justify-content: center;  /* Center the items horizontally */
+    }
+
+    header a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 20px;
+        font-weight: bold;
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+
+    header a:hover {
+        color: #64dd17;
+    }
+

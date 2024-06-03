@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support Form</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+        header p {
+            margin: 0;
+            padding: 5px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .screen1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #4caf50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            color: #555;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .form-div {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .bton {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .bton button {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .bton button:hover {
+            background-color: #45a049;
+        }
+
+        textarea {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Tab styles */
+        .tab {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab.active {
+            display: block;
+        }
+    </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            color: #4caf50;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .welcome-message {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .logout-button {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-self: flex-end; /* Align to the end of the container */
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            width: 100%; /* Make tabs take full width */
+        }
+        
+        .tab {
+            cursor: pointer;
+            padding: 69px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .tab.active {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .table-container {
+            display: none;
+            width: 100%; /* Make table containers take full width */
+        }
+        
+        .table-container.active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        form {
+    /* height: 239px; */
+    max-width: 600px;
+    /* width: 100%; */
+    margin: 35px auto;
+    padding: 21px;
+    /* background-color: #fff; */
+    /* border-radius: 8px; */
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
+    text-align: center;
+}
+        
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* File upload styles */
+        #dropArea {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        
+        label[for="excelFile"] {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        #removeButton {
+            cursor: pointer;
+            color: red;
+            margin-left: 10px;
+            display: none;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 4px;
+        }
+        
+        .custom-file-upload:hover {
+            background-color: #45a049;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        .mover {
+
+    transform: translate(5%, 4%);
+    width: 580px;
+}
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: white;
+}
+
+header p {
+    margin: 0;
+    padding: 5px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+#reportProblemForm {
+    display: none; /* Initially hide the form */
+}
+
+#reportProblemForm.active {
+    display: block; /* Display the form when active */
+}
+
+/* Rest of your CSS */
+
+
+        
+            </style>
+    
+</head>
+<body>
+    
+    <header>
+        <div>
+            <p>User ID: {{ user_data[0] }}</p>
+            <p>Name: {{ user_data[1] }}</p>
+            <p>Email: {{ user_data[2] }}</p>
+        </div>
+        <nav> 
+            <a href="#" onclick="openTabs('reportprob')">Report a Problem</a>
+            <a href="javascript:void(0)" onclick="openTab('complaints')">Previous Complaints</a>
+            <a href="#" onclick="openTabs('graphs')"> Unsolved Cases</a>
+            <a href="#" onclick="openTabs1('graphs1')"> Solved Cases</a>
+            <a class="logout-link" href="/User_logout">Logout</a>
+        </nav>
+    </header>
+    
+    <!--<div id="reportProblemForm" style="display: none;">
+        <div class="form-div">
+            <form name="reportProblem" action="User_process_data" method="post">
+                <p><label for="description">Tell the problem you are facing</label></p>
+                <input type="hidden" name="user_id" value="{{ user_data[0] }}">
+                <textarea id="problemDescription" name="Description" rows="4" cols="50" placeholder="Click on 'Start REC' to Activate voice input method  "></textarea>
+                <div class="bton">
+                    <button type="button" onclick="startSpeechRecognition()">Start REC</button>
+                    <button type="button" onclick="stopSpeechRecognition()">Stop REC</button>
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>-->
+<div class="screen">
+    
+    <div id="reportprob" class="form-div tab">
+        <div id="screen11" class="screen1">
+            <h1>Customer Support</h1>
+            <p class="description">Describe your issue</p>
+            <p class="description">Help us assist you</p>
+        </div>
+        <form name="passdata" action="User_process_data" method="post">
+            <p><label for="description">Tell the problem you are facing</label></p>
+            <input type="hidden" name="user_id" value="{{ user_data[0] }}">
+            <textarea id="w3review" name="Description" rows="4" cols="50" placeholder="Click on 'Start REC' to Activate voice input method  "></textarea>
+            <div class="bton">
+                <button type="button" onclick="startSpeechRecognition()">Start REC</button>
+                <button type="button" onclick="stopSpeechRecognition()">Stop REC</button>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <div id="complaints" class="tab">
+    </div>
+
+    <div id="graphs" class="tab mover" >
+        <canvas id="myChart" width="400" height="400" ></canvas>
+    </div>
+
+    <div id="graphs1" class="tab mover" >
+        <canvas id="myChart3" width="400" height="400"  ></canvas>
+    </div>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.js"></script>
+<script>
+function toggleForm() {
+    var reportProblemForm = document.getElementById('reportProblemForm');
+    reportProblemForm.classList.toggle('active');
+}
+
+    // Function to fetch data and create graphs
+    function displayGraphs1() {
+        
+
+        fetch('/get_graph_data1', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Check if the response contains graph data
+            if (data.error) {
+                console.error('Failed to fetch graph data:', data.error);
+            } else {
+                // Create graph using Chart.js
+                var ctx = document.getElementById('myChart3').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Solved Cases',
+                            data: data.counts, // Use 'counts' instead of 'values'
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching graph data:', error));
+    }
+
+    // Function to handle tab clicks
+    function openTabs1(tabName) {
+    var i, tabcontent;
+    tabcontent = document.getElementsByClassName("tab");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    var selectedTab = document.getElementById(tabName);
+    var blocker = document.getElementById('screen11');
+    /*blocker.style.display = "none";*//*vhange layertrrrrrrr*/
+    if (selectedTab) {
+        selectedTab.style.display = "block";
+        // If Graphs tab is clicked, display graphs
+        if (tabName === 'graphs1') {
+            displayGraphs1();
+        }  
+    } else {
+        console.error("Tab with ID " + tabName + " not found.");
+    }
+}  
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.js"></script>
+<script>
+
+    // Function to fetch data and create graphs
+    function displayGraphs() {
+        fetch('/get_graph_data', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Check if the response contains graph data
+            if (data.error) {
+                console.error('Failed to fetch graph data:', data.error);
+            } else {
+                // Create graph using Chart.js
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Unsolved Cases',
+                            data: data.counts, // Use 'counts' instead of 'values'
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching graph data:', error));
+
+    }
+
+    // Function to handle tab clicks
+    function openTabs(tabName) {
+    var i, tabcontent;
+    tabcontent = document.getElementsByClassName("tab");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    var selectedTab = document.getElementById(tabName);
+    if (selectedTab) {
+        selectedTab.style.display = "block";
+        // If Graphs tab is clicked, display graphs
+        if (tabName === 'graphs') {
+            displayGraphs();
+        }  
+    } else {
+        console.error("Tab with ID " + tabName + " not found.");
+    }
+}  
+</script>
+
+
+
+<script>
+    let recognition;
+    
+    function startSpeechRecognition() {
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            if (!recognition) {
+                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'en-US';
+        
+                recognition.onresult = function(event) {
+                    const result = event.results[0][0].transcript;
+                    document.getElementById('w3review').value = result;
+                };
+        
+                recognition.onend = function() {
+                    if (recognition.continuous) {
+                        recognition.start();
+                    }
+                };
+        
+                recognition.start();
+            } else {
+                alert("Recognition is already started.");
+            }
+        } else {
+            alert("SpeechRecognition API not supported in this browser");
+        }
+    }
+    
+    function stopSpeechRecognition() {
+        if (recognition) {
+            recognition.stop();
+            recognition = null;
+        }
+    }
+
+    function openTab(tabName) {
+        var i, tabcontent;
+        tabcontent = document.getElementsByClassName("tab");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        document.getElementById(tabName).style.display = "block";
+    }
+</script>
+
+
+    <script>
+        function openTab(tabName) {
+            var i, tabcontent;
+            tabcontent = document.getElementsByClassName("tab");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+    
+            // Fetch previous complaints via AJAX when tab is opened
+            if (tabName === 'complaints') {
+                fetch('/get_previous_complaints', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the complaints tab content with fetched data
+                    if (data.success) {
+                        document.getElementById('complaints').innerHTML = data.html;
+                    } else {
+                        console.error('Failed to fetch previous complaints');
+                    }
+                })
+                .catch(error => console.error('Error fetching previous complaints:', error));
+            }
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Customer Support</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        /* Add CSS for main page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        header a:hover {
+            color: #64dd17;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #4caf50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+        }
+
+        .step h2 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .step a {
+            color: #4caf50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .step a:hover {
+            color: #64dd17;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/User_Guide">User Guide</a>
+        <a href="/report_problem">Report a Problem</a>
+        <a href="#">Contact us</a>
+        <a href="/login">Admin Login</a>
+        <a href="/User_login">User Login</a>
+    </header>
+
+    <div class="container">
+        <h1>Welcome to Customer Support</h1>
+        <p>Thank you for choosing our customer support service. Here's how you can get started:</p>
+
+        <div class="steps">
+            <div class="step">
+                <h2>Step 1: Report a Problem</h2>
+                <p>If you encounter any issues or need assistance, click <a href="/report_problem">here</a> to report a problem.</p>
+            </div>
+            <div class="step">
+                <h2>Step 2: User Login</h2>
+                <p>If you're a registered user, log in <a href="/User_login">here</a> to track your complaints and access personalized services.</p>
+            </div>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <h2>Step 3: User Registration</h2>
+                <p>If you haven't registered yet, create an account <a href="/User_Reg">here</a> to access all our services.</p>
+            </div>
+            <div class="step">
+                <h2>Step 4: Contact Us</h2>
+                <p>If you need further assistance, don't hesitate to <a href="#">contact us</a>. Our team is ready to help you.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

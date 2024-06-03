@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grievance Management System - Admin</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    color: #4caf50;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-message {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.logout-button {
+    background-color: #d9534f;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-end; /* Align to the end of the container */
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 100%; /* Make tabs take full width */
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.tab.active {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.table-container {
+    display: none;
+    width: 100%; /* Make table containers take full width */
+}
+
+.table-container.active {
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+form {
+    max-width: 600px;
+    width: 100%; /* Make the form take full width */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* File upload styles */
+#dropArea {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+label[for="excelFile"] {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+#removeButton {
+    cursor: pointer;
+    color: red;
+    margin-left: 10px;
+    display: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.custom-file-upload:hover {
+    background-color: #45a049;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+
+    </style>
+    <script>
+        function switchTab(tabName) {
+    console.log('Switching to tab:', tabName);
+    var tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+
+    var tableContainers = document.querySelectorAll('.table-container');
+    tableContainers.forEach(container => container.classList.remove('active'));
+
+    var containerId = tabName + 'TableContainer';
+    console.log('Container ID:', containerId);
+    document.getElementById(containerId).classList.add('active');
+}
+
+
+    function searchGrievancesres() {
+    var input, filter, table, tr, td, i, j, txtValue;
+    input = document.getElementById("searchInput1");
+    filter = input.value.toUpperCase();
+    //table = document.getElementById("resolvedCasesTable"); // Update table ID here
+    table = document.getElementById("resolvedCasesTable"); // Update table ID here
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        if (i === 0) {
+            continue;
+        }
+
+        let found = false;
+        for (j = 0; j < tr[i].cells.length; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break; 
+                }
+            }
+        }
+        tr[i].style.display = found ? "" : "none";
+    }
+}
+
+function searchGrievances() {
+    var input, filter, table, tr, td, i, j, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    //table = document.getElementById("resolvedCasesTable"); // Update table ID here
+    table = document.getElementById("complaintsTable"); // Update table ID here
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        if (i === 0) {
+            continue;
+        }
+
+        let found = false;
+        for (j = 0; j < tr[i].cells.length; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break; 
+                }
+            }
+        }
+        tr[i].style.display = found ? "" : "none";
+    }
+}
+
+        /*uploading file script start*/
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const files = event.dataTransfer.files;
+            document.getElementById('excelFile').files = files;
+            displayFileName(document.getElementById('excelFile'));
+            showRemoveButton();
+        }
+
+        function displayFileName(input) {
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            fileNameDisplay.textContent = input.files[0] ? input.files[0].name : '';
+            showRemoveButton();
+        }
+        function removeFile() {
+            const fileInput = document.getElementById('excelFile');
+            fileInput.value = ''; // Clear the input
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            fileNameDisplay.textContent = '';
+            hideRemoveButton();
+        }
+
+        function showRemoveButton() {
+            document.getElementById('removeButton').style.display = 'inline';
+        }
+
+        function hideRemoveButton() {
+            document.getElementById('removeButton').style.display = 'none';
+        }
+        /*uploading file script end*/
+
+
+    </script>
+
+
+    
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Grievance Management System</h1>
+            <p class="welcome-message" id="welcomeMessage">Welcome, Admin {{ welcome_message }}</p>
+           
+            <a class="logout-button" href="/admin_logout" style="text-decoration: none;">Logout</a>
+
+
+            <div class="tabs">
+                <div id="complaints" class="tab active" onclick="switchTab('complaints')">Complaints</div>
+                <div id="resolvedCases" class="tab" onclick="switchTab('resolvedCases')">Resolved Cases</div>
+                <div id="uploadFile" class="tab " onclick="switchTab('uploadFile')">Upload Complaints </div>
+                <div id="AddSupport" class="tab " onclick="switchTab('AddSupport')">Add Support</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+       
+
+        <div id="complaintsTableContainer" class="table-container active">
+            <input type="text" class="search-bar" placeholder="Search grievances..." id="searchInput" onkeyup="searchGrievances()">
+            <table id="complaintsTable">
+                <tr>
+                    <th>Token Number</th>
+                    <th>Description</th>
+                    <th>Predicted Category</th>
+                    <th>Issue</th>
+                    <th>Time Stamp</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>User Id</th>
+                    
+                </tr>
+                {% for row in data %}
+                <tr>
+                    {% for value in row %}
+                    <td>
+                        {% if loop.index == 1 %}
+                            <a href="{{ url_for('record_details', token=value) }}">{{ value }}</a>
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="resolvedCasesTableContainer" class="table-container">
+            <input type="text" class="search-bar" placeholder="Search grievances..." id="searchInput1" onkeyup="searchGrievancesres()">
+            <table id="resolvedCasesTable">
+                <tr>
+                    <th>Token Number</th>
+                    <th>Description</th>
+                    <th>Predicted Category</th>
+                    <th>Issue</th>
+                    <th>Submitted Time Stamp</th>
+                    <th>Solved Time Stamp</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>User Id</th>
+                    <th>Complaint Category final</th>
+                </tr>
+                {% for row in resolvedCasesData %}
+                <tr>
+                    {% for value in row %}
+                    <td>
+                        {% if loop.index == 1 %}
+                            <a href="{{ url_for('record_details', token=value) }}">{{ value }}</a>
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+        <div id="uploadFileTableContainer" class="table-container">
+            <form id="uploadFile" action="/upload" method="post" enctype="multipart/form-data">
+                <label for="excelFile">Choose an Excel file or drag it here:</label>
+                <div id="dropArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                    Drop file here or click to select
+                    <input type="file" name="excelFile" id="excelFile" accept=".xlsx" onchange="displayFileName(this)">
+                </div>
+                <div>
+                    <span id="fileNameDisplay"></span>
+                    <span id="removeButton" onclick="removeFile()">❌</span>
+                </div>
+                <br>
+                <input type="submit" value="Upload">
+                
+            </form>
+
+            
+
+
+        </div>
+
+        <div id="AddSupportTableContainer" class="table-container">
+            <form id="AddSupport" action="/create_support_account" method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+        
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+        
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="Checking or savings account">Checking or savings account</option>
+                    <option value="Credit card or prepaid card">Credit card or prepaid card</option>
+                    <option value="Credit reporting, credit repair services, or other personal consumer reports">Credit reporting, credit repair services, or other personal consumer reports</option>
+                    <option value="Debt collection">Debt collection</option>
+                </select>
+        
+                <input type="submit" value="Create Account">
+            </form>
+        </div>
+        
+
+    </div>
+
+</body>
+
+</html>

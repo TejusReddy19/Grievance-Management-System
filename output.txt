@@ -1,0 +1,3 @@
+Description: Have paid all my debits but again I'm getting calls from bank saying that I'm not have not paid it.
+Predicted Category: Checking or savings account
+Predicted Category Issue: Debt was paid

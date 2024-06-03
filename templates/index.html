@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support Form</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          // Fetch counts from the server
+          fetch('/get_counts')
+              .then(response => response.json())
+              .then(data => {
+                  // Update counts on the page
+                  document.getElementById('submitCount').textContent = data.submit_count;
+                  document.getElementById('solvedCount').textContent = data.solved_count;
+              })
+              .catch(error => console.error('Error fetching counts:', error));
+      });
+  
+
+  </script>
+ <style>
+  body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+  }
+
+  .screen {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      min-height: 100vh;
+  }
+
+  .screen1 {
+      text-align: center;
+      color: #333;
+  }
+
+  h1 {
+      color: #4caf50;
+      font-size: 2em;
+      margin-bottom: 20px;
+  }
+
+  .description {
+      color: #555;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+  }
+
+  .form-div {
+      max-width: 400px;
+      margin: 0 auto;
+  }
+
+  .form-div p {
+      margin: 5px 0;
+  }
+
+  .bton {
+      display: flex;
+      gap: 10px;
+  }
+
+  .bton button {
+      background-color: #4caf50;
+      color: #fff;
+      cursor: pointer;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+  }
+
+  .bton button:hover {
+      background-color: #45a049;
+  }
+
+  .notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:  #45a049;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+
+</style>
+</head>
+<body>
+
+    <header>
+          <a href="/User_Guide">User Guide</a>
+          <a href="/report_problem">Report a Problem</a>
+          <a href="#">Contact us</a>
+          <a href="/login">Admin Login</a>
+          <a href="/User_login">User Login</a>
+  </header>
+
+
+    <div class="screen">
+        <div class="screen1">
+            <h1>Customer Support</h1>
+            <p class="description">Describe your issue</p>
+            <p class="description">Help us assist you</p>
+            <div class="pdisplayer">
+              <p>Submits: <span id="submitCount">Loading...</span></p>
+              <p>Solved: <span id="solvedCount">Loading...</span></p>
+              <canvas id="submissionChart" width="100" height="100"></canvas>
+            </div>
+        </div>
+        <div id="notification" style="display: none;" class="notification"></div>
+        <div class="screen2">
+            <div class="form-div">
+                <form name="passdata" action="process_data" method="post">
+                    <p><label for="name">Name</label></p>
+                    <input type="text" name="Uname">
+                    <p><label for="phone number">Contact Number</label></p>
+                    <input type="number" name="Pnum">
+                    <p><label for="mail">Email</label></p>
+                    <input type="email" name="Email">
+                    <p><label for="description">Describe the problem you are facing</label></p>
+                    <textarea id="w3review" name="Description" rows="4" cols="50"></textarea>
+                    <p id="output"></p>
+                    <div class="bton">
+                      <button type="button" onclick="startSpeechRecognition()">Start REC</button>
+                      <button type="button" onclick="stopSpeechRecognition()">Stop REC</button>
+                    </div>
+                    <br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+    // Fetch counts from the server
+    fetch('/get_counts')
+        .then(response => response.json())
+        .then(data => {
+            // Update counts on the page
+            document.getElementById('submitCount').textContent = data.submit_count;
+            document.getElementById('solvedCount').textContent = data.solved_count;
+
+            // Initialize circular graph using Chart.js
+            const ctx = document.getElementById('submissionChart').getContext('2d');
+            if (!ctx) {
+                console.error('Canvas context is null.');
+                return;
+            }
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Submits', 'Solved'],
+                    datasets: [{
+                        data: [data.submit_count, data.solved_count],
+                        backgroundColor: ['#4caf50', '#64dd17'],
+                    }],
+                },
+                options: {
+                    cutout: '80%',
+                    responsive: true,
+                },
+            });
+        })
+        .catch(error => console.error('Error fetching counts:', error));
+
+    // Add event listener for form submission
+    document.forms['passdata'].addEventListener('submit', function() {
+        // Create notification element
+        var notification = document.createElement('div');
+        notification.setAttribute('class', 'notification');
+        notification.textContent = 'Please wait while processing...';
+
+        // Append notification to the document body
+        document.body.appendChild(notification);
+
+        // After 3 seconds, remove the notification
+        setTimeout(function() {
+            notification.remove();
+        }, 3000); // 3000 milliseconds = 3 seconds
+    });
+});
+
+    </script>
+
+    <script>
+        let recognition;
+        
+        function startSpeechRecognition() {
+          if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            if (!recognition) {
+              recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+              recognition.lang = 'en-US';
+        
+              recognition.onresult = function(event) {
+                const result = event.results[0][0].transcript;
+                document.getElementById('w3review').value = result;
+              };
+        
+              recognition.onend = function() {
+                if (recognition.continuous) {
+                  recognition.start();
+                }
+              };
+        
+              recognition.start();
+            } else {
+              alert("Recognition is already started.");
+            }
+          } else {
+            alert("SpeechRecognition API not supported in this browser");
+          }
+        }
+        
+        function stopSpeechRecognition() {
+          if (recognition) {
+            recognition.stop();
+            recognition = null;
+          }
+        }
+  document.addEventListener('DOMContentLoaded', function () {
+    try {
+      // Fetch counts from the server
+      fetch('/get_counts')
+        .then(response => response.json())
+        .then(data => {
+          // Update counts on the page
+          document.getElementById('submitCount').textContent = data.submit_count;
+          document.getElementById('solvedCount').textContent = data.solved_count;
+
+          // Initialize circular graph using Chart.js
+          const ctx = document.getElementById('submissionChart').getContext('2d');
+          if (!ctx) {
+            console.error('Canvas context is null.');
+            return;
+          }
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Submits', 'Solved'],
+              datasets: [{
+                data: [data.submit_count, data.solved_count],
+                backgroundColor: ['#4caf50', '#64dd17'],
+              }],
+            },
+            options: {
+              cutout: '80%',
+              responsive: true,
+            },
+          });
+        })
+        .catch(error => console.error('Error fetching counts:', error));
+    } catch (error) {
+      console.error('Error initializing Chart.js:', error);
+    }
+  });
+  </script>
+</body>
+</html>

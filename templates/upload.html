@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel Sheet</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        #dropArea {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #removeButton {
+            cursor: pointer;
+            color: red;
+            margin-left: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="excelFile">Choose an Excel file or drag it here:</label>
+        <div id="dropArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+            Drop file here or click to select
+            <input type="file" name="excelFile" id="excelFile" accept=".xlsx" onchange="displayFileName(this)">
+        </div>
+        <div >
+            <span id="fileNameDisplay"></span>
+            <span id="removeButton" onclick="removeFile()">❌</span>
+            <input type="file" name="excelFile" id="excelFile" accept=".xlsx" onchange="displayFileName(this)">
+        </div>
+        <br>
+        <input type="submit" value="Upload">
+    </form>
+
+        <div id="progress-container" style="display: none;">
+            <div id="progress-bar"></div>
+            <div id="progress-label">0%</div>
+        </div>
+
+
+    <script>
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const files = event.dataTransfer.files;
+            document.getElementById('excelFile').files = files;
+            displayFileName(document.getElementById('excelFile'));
+            showRemoveButton();
+        }
+
+        function displayFileName(input) {
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            fileNameDisplay.textContent = input.files[0] ? input.files[0].name : '';
+            showRemoveButton();
+        }
+        function removeFile() {
+            const fileInput = document.getElementById('excelFile');
+            fileInput.value = ''; 
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            fileNameDisplay.textContent = '';
+            hideRemoveButton();
+        }
+
+        function showRemoveButton() {
+            document.getElementById('removeButton').style.display = 'inline';
+        }
+
+        function hideRemoveButton() {
+            document.getElementById('removeButton').style.display = 'none';
+        }
+    </script>
+
+<script>
+    // Function to update progress bar
+    function updateProgress(percentage) {
+        const progressBar = document.getElementById('progress-bar');
+        const progressLabel = document.getElementById('progress-label');
+
+        // Update progress bar width
+        progressBar.style.width = percentage + '%';
+
+        // Update progress label
+        progressLabel.textContent = percentage + '%';
+
+        // Show progress container if hidden
+        document.getElementById('progress-container').style.display = 'block';
+    }
+
+    // Function to handle file upload
+    function handleFileUpload(event) {
+    // Your existing file upload handling code
+    
+    // Simulate progress with three steps
+    step1(); // Complete step 1
+    updateProgress(33); // Update progress to 33%
+    
+    step2(); // Complete step 2
+    updateProgress(66); // Update progress to 66%
+    
+    step3(); // Complete step 3
+    updateProgress(100); // Update progress to 100%
+    }
+
+    // Add event listener to file input
+    document.getElementById('excelFile').addEventListener('change', handleFileUpload);
+</script>
+
+</body>
+
+</html>
