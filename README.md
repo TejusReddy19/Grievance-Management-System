@@ -40,7 +40,8 @@ Our project successfully creates a user-friendly platform that simplifies the co
 
 How To Use:
 
-Extract the folder Dataset 
-import the sql file (customer_service) into xampp server by creating a db there.
-flask installation and ur deasired ide i prefer vs code. 
-In pyscript ,in pridSVC change the model file location properly. 
+Set Up Database: Extract the Dataset folder and import the SQL file (customer_service) into XAMPP's MySQL by creating a new database.
+Install Dependencies: Use pip install -r requirements.txt to install required Python packages.
+Configure Flask: Open pridSVC.py in the pyscript directory and update the model file path.
+Run Application: Start the Flask server with flask run and navigate to http://127.0.0.1:5000.
+Usage: Register or submit grievances via voice input; admins can manage and resolve complaints.
